@@ -49,23 +49,18 @@ const Skills = () => {
     const [hoveredSkill, setHoveredSkill] = useState(null);
 
     return (
-        <div id="skills" className="min-h-screen w-full font-mono flex flex-col p-6"
+        <div id="skills" className="min-h-screen w-full font-mono flex flex-col p-6 py-12"
             style={{background: "radial-gradient(circle, rgba(31,31,31,1) 0%, rgba(13,13,13,1) 100%)",}}>
-            <h2 className="text-4xl font-bold text-[#10B981] mb-32">
+            <h2 className="text-4xl font-bold font-mono text-[#10B981] mb-32">
                 My Skills 
                 <span className="text-white">(</span>
                 <span className="text-white">)</span>
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 {skills.map((skill, index) => (
-                    <div key={index} className="relative group flex flex-col items-center" 
-                        onMouseEnter={() => setHoveredSkill(index)}
-                        onMouseLeave={() => setHoveredSkill(null)}>
+                    <div key={index} className="relative group flex flex-col items-center" onMouseEnter={() => setHoveredSkill(index)} onMouseLeave={() => setHoveredSkill(null)}>
                         <img src={skill.image} alt={skill.name} className="w-[100px] transition-transform duration-300 group-hover:scale-105"/>
-                        <motion.div 
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: hoveredSkill === index ? 1 : 0, y: hoveredSkill === index ? 0 : 10 }}
-                            transition={{ duration: 0.3 }}
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: hoveredSkill === index ? 1 : 0, y: hoveredSkill === index ? 0 : 10 }} transition={{ duration: 0.3 }}
                             className="absolute  rounded-full bg-black/90 p-15 z-40 w-[250px] h-[250px] text-sm text-white text-center px-4"
                         >
                             {skill.description}

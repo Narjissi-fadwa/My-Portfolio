@@ -8,6 +8,10 @@ import htmlLogo from "../assets/images/html-logo.jpg"
 import jsLogo from "../assets/images/javascript-logo.webp"
 import bibliotheca from "../assets/images/bibliotheca.png"
 import restaurantly from "../assets/images/restaurantly.png"
+import easyfolio from "../assets/images/easyfolio.png"
+import moviesiteweb from "../assets/images/moviesiteweb.png"
+import about from "../assets/images/about.png"
+
 
 export default {
     cssLogo,
@@ -19,5 +23,8 @@ export default {
     htmlLogo,
     jsLogo,
     bibliotheca,
-    restaurantly
+    restaurantly,
+    easyfolio,
+    moviesiteweb,
+    about
 }
