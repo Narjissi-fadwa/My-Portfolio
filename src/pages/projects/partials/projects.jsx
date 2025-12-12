@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
+import { useInView } from 'framer-motion';
 import images from '../../../constant/images';
-import { div } from 'framer-motion/client';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 const projectsData = [
     {
@@ -29,67 +29,123 @@ const projectsData = [
         link: 'https://moviesiteweb.vercel.app/',
         description: 'This is a website I made for people who love movies, so they can find information about the films they like. It includes a search function and displays movie posters.'
     },
-    
-
 ];
 
-gsap.registerPlugin(ScrollTrigger);
-
 const Projects = () => {
-    const containerRef = useRef(null);
-    const sectionsRef = useRef([]);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-    useEffect(() => {
-        const sections = sectionsRef.current;
-        const totalSections = sections.length;
-        const container = containerRef.current;
-
-    gsap.to(sections, {
-        xPercent: -100 * (totalSections - 1),
-        ease: 'none',
-        scrollTrigger: {
-            trigger: container,
-            pin: true,
-            scrub: 1,
-            snap: 1 / (totalSections - 1),
-            end: () => "+=" + container.offsetWidth,
-            invalidateOnRefresh: true,
-        },
-    });
-
-    return () => {
-        ScrollTrigger.getAll().forEach(trigger => {
-            if (trigger.trigger === container) {
-                trigger.kill();
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1
             }
-        });
+        }
     };
-}, []);
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: [0.4, 0, 0.2, 1]
+            }
+        }
+    };
 
     return (
-        
-        <div id='projects' className='w-full p-6 py-12' style={{background: "radial-gradient(circle, rgba(31,31,31,1) 0%, rgba(13,13,13,1) 100%)",}}>
-            <h2 className="text-4xl font-bold font-mono text-[#10B981] mb-8">
-                    My projects
+        <div 
+            id='projects' 
+            ref={ref}
+            className='w-full px-6 py-20 md:py-32 relative overflow-hidden'
+            style={{
+                background: "radial-gradient(circle, rgba(31,31,31,1) 0%, rgba(13,13,13,1) 100%)",
+            }}
+        >
+            {/* Decorative background elements */}
+            <div className="absolute top-0 left-20 w-96 h-96 bg-[#10B981] opacity-5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-20 w-96 h-96 bg-[#10B981] opacity-5 rounded-full blur-3xl"></div>
+
+            <div className="container mx-auto max-w-7xl relative z-10">
+                <motion.h2 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.6 }}
+                    className="text-4xl md:text-5xl font-bold font-mono text-[#10B981] mb-16 text-center"
+                >
+                    My Projects
                     <span className="text-white">(</span>
                     <span className="text-white">)</span>
-                </h2>
-            <div
-            ref={containerRef}
-            className="w-full h-[70vh] overflow-hidden flex "
-            
-        >
+                </motion.h2>
 
-            {projectsData.map((project, index) => (
-                <div key={index} ref={(el) => (sectionsRef.current[index] = el)} className="w-screen h-full flex flex-col items-center justify-center text-white text-center p-6">
-                    <img src={project.image} alt={project.name} className="max-w-md max-h-48 object-contain mb-4 rounded-md shadow-md" />
-                    <h3 className="text-2xl font-bold font-mono mb-2 text-[#10B981]">{project.name}</h3>
-                    <p className="text-lg font-mono">{project.description}</p>
-                    <a className="text-lg font-mono hover:text-blue-700" href={project.link} target='_blank'>
-                        <span>&#123;</span>visit<span>&#125;</span></a>
-                </div>
-            ))}
-        </div>
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate={isInView ? "visible" : "hidden"}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10"
+                >
+                    {projectsData.map((project, index) => (
+                        <motion.div
+                            key={index}
+                            variants={itemVariants}
+                            whileHover={{ y: -10 }}
+                            transition={{ duration: 0.3 }}
+                            className="group relative"
+                        >
+                            <div className="relative h-full bg-gradient-to-br from-black/40 to-[#1F1F1F]/40 backdrop-blur-sm border border-[#10B981]/20 rounded-xl overflow-hidden hover:border-[#10B981]/50 transition-all duration-300">
+                                {/* Glow effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#10B981]/0 via-[#10B981]/5 to-[#10B981]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                
+                                {/* Image container */}
+                                <div className="relative h-48 md:h-64 overflow-hidden bg-black/20">
+                                    <motion.img 
+                                        src={project.image} 
+                                        alt={project.name} 
+                                        className="w-full h-full object-cover"
+                                        whileHover={{ scale: 1.1 }}
+                                        transition={{ duration: 0.4 }}
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                </div>
+
+                                {/* Content */}
+                                <div className="p-6 md:p-8 relative z-10">
+                                    <h3 className="text-2xl md:text-3xl font-bold font-mono mb-4 text-[#10B981] group-hover:text-[#34D399] transition-colors duration-300">
+                                        {project.name}
+                                    </h3>
+                                    <p className="text-[#E5E7EB] font-mono text-sm md:text-base leading-relaxed mb-6 text-[#9CA3AF]">
+                                        {project.description}
+                                    </p>
+                                    
+                                    {/* Link button */}
+                                    <motion.a 
+                                        href={project.link} 
+                                        target='_blank' 
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#10B981] to-[#34D399] text-black font-mono font-semibold rounded-lg hover:shadow-lg hover:shadow-[#10B981]/50 transition-all duration-300 group/link"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <span>&#123;</span>
+                                        <span>Visit Project</span>
+                                        <span>&#125;</span>
+                                        <FaExternalLinkAlt className="text-sm group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform duration-300" />
+                                    </motion.a>
+                                </div>
+
+                                {/* Decorative corner */}
+                                <div className="absolute top-0 right-0 w-20 h-20 border-t border-r border-[#10B981]/30 rounded-tr-xl"></div>
+                                <div className="absolute bottom-0 left-0 w-20 h-20 border-b border-l border-[#10B981]/30 rounded-bl-xl"></div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </div>
         </div>
     );
 };
